@@ -1,0 +1,24 @@
+{
+  "name": "gosource",
+  "version": "1.0.0",
+  "description": "GoSource pre-interview test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hlqviet/gosource.git"
+  },
+  "author": "Viet Huynh <xa.lach@yahoo.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hlqviet/gosource/issues"
+  },
+  "homepage": "https://github.com/hlqviet/gosource#readme",
+  "workspaces": [
+    "database",
+    "backend",
+    "frontend"
+  ]
+}
