@@ -3,6 +3,8 @@ import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
 
+import { errorHandler } from '@/middlewares/error'
+
 const app = express()
 
 app
@@ -11,7 +13,7 @@ app
   .use(express.urlencoded({ extended: true }))
   .use(compression())
   .use(cors())
-
-app.options('*', cors())
+  .options('*', cors())
+  .use(errorHandler)
 
 export default app
