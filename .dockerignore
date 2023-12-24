@@ -1,0 +1,8 @@
+*.md
+.dockerignore
+.git
+.husky
+.next
+compose.yml
+Dockerfile
+node_modules
