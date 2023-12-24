@@ -4,5 +4,6 @@
 .husky
 .next
 compose.yml
+dist
 Dockerfile
 node_modules
