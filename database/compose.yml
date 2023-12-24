@@ -2,7 +2,6 @@ services:
   database:
     image: mongo:jammy
     container_name: gosource-database
-    network: gosource-network
     ports:
       - "127.0.0.1:${MONGO_PORT-27017}:27017"
       - "[::1]:${MONGO_PORT-27017}:27017"
