@@ -2,7 +2,7 @@ import express from 'express'
 
 import * as userController from '@/controllers/user.controller'
 import { validate } from '@/middlewares/validate'
-import * as userValidation from '@/validations/user.validation'
+import { userValidation } from '@/validations'
 
 const router = express.Router()
 
