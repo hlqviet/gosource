@@ -6,6 +6,7 @@ import logger from '@/config/logger'
 
 const errorHandler: ErrorRequestHandler = (err, _req, res) => {
   let { statusCode, message } = err
+
   if (config.environment === 'production') {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR]
