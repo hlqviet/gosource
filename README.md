@@ -40,5 +40,5 @@ Now that you have the database and all the apps up. Let's seed some data by runn
 
 ## Troubleshooting
 
-- If you use Windows Subsystem for Linux you may need to use the host network driver for Docker so it can download the packages. See `compose.yml` in the root directory.
+- If you use Windows Subsystem for Linux you may need to use the host network driver for Docker so the packages can be downloaded. See `compose.yml` in the root directory.
 - There is a unique constraint for Email column in the database table so data seeding may throw an error if it generates a duplicate email. You just need to run the command again in this case.
