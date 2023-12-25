@@ -1,7 +1,8 @@
 services:
   database:
-    build:
-      network: host
+    # Uncomment for WSL
+    # build:
+    #   network: host
     container_name: gosource-database
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -15,7 +16,8 @@ services:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
-      network: host
+      # Uncomment for WSL
+      # network: host
     container_name: gosource-backend
     depends_on:
       - database
@@ -29,7 +31,8 @@ services:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
-      network: host
+      # Uncomment for WSL
+      # network: host
     container_name: gosource-frontend
     depends_on:
       - backend
