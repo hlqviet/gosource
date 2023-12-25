@@ -164,7 +164,7 @@ const App = () => {
       {loading && <div className='loading loading-spinner' />}
 
       {!loading && data?.data.length && (
-        <div className='w-full'>
+        <div className='w-full h-[calc(100vh-15rem)] overflow-y-auto'>
           <UserTable users={data.data} />
         </div>
       )}

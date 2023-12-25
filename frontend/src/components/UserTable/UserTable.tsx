@@ -8,7 +8,7 @@ const UserTable = (props: UserTableProps) => {
   const { users } = props
 
   return (
-    <table className='table'>
+    <table className='table table-pin-rows'>
       <thead>
         <tr>
           <th>ID</th>
