@@ -1,6 +1,7 @@
-import { FormEventHandler, useState } from 'react'
+import { ChangeEventHandler, FormEventHandler, useState } from 'react'
 
 import useGetUsersQuery from '../../hooks/useGetUsersQuery'
+import { PER_PAGE } from '../../lib/constants'
 import { Role } from '../../lib/enums'
 import ButtonBase from '../Buttons/ButtonBase'
 import ButtonPrimary from '../Buttons/ButtonPrimary'
@@ -11,10 +12,15 @@ import UserTable from '../UserTable'
 const App = () => {
   const [name, setName] = useState('')
   const [role, setRole] = useState('')
+  const [itemsPerPage, setItemsPerPage] = useState(PER_PAGE)
   const [cursorHistory, setCursorHistory] = useState<number[]>([])
   const [queryParams, setQueryParams] = useState<
     Parameters<typeof useGetUsersQuery>[0]
-  >({})
+  >({
+    pagination: {
+      perPage: itemsPerPage
+    }
+  })
   const { data, error, loading } = useGetUsersQuery(queryParams)
 
   const handleReset: FormEventHandler<HTMLFormElement> = (event) => {
@@ -22,23 +28,53 @@ const App = () => {
 
     setName('')
     setRole('')
-    setQueryParams({})
+    setQueryParams({
+      pagination: {
+        perPage: itemsPerPage
+      }
+    })
+    setCursorHistory([])
   }
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
 
     setQueryParams({
-      lastCursor: undefined,
-      name,
-      role: role as Role
+      query: {
+        name,
+        role: role as Role
+      },
+      pagination: {
+        perPage: itemsPerPage,
+        lastCursor: undefined
+      }
     })
+    setCursorHistory([])
+  }
+
+  const handlePerPageChange: ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
+    const perPage = parseInt(event.target.value, 10)
+
+    setItemsPerPage(perPage)
+    setQueryParams((prevState) => ({
+      ...prevState,
+      pagination: {
+        lastCursor: undefined,
+        perPage
+      }
+    }))
+    setCursorHistory([])
   }
 
   const handlePreviousClick = () => {
     setQueryParams((prevState) => ({
       ...prevState,
-      lastCursor: cursorHistory[cursorHistory.length - 2]
+      pagination: {
+        ...prevState.pagination,
+        lastCursor: cursorHistory[cursorHistory.length - 2]
+      }
     }))
 
     setCursorHistory((prevState) => prevState.slice(0, -1))
@@ -49,7 +85,10 @@ const App = () => {
 
     setQueryParams((prevState) => ({
       ...prevState,
-      lastCursor
+      pagination: {
+        ...prevState.pagination,
+        lastCursor
+      }
     }))
 
     if (lastCursor !== undefined) {
@@ -90,28 +129,43 @@ const App = () => {
         </form>
       </div>
 
+      {data?.data && (
+        <div className='w-full flex justify-between items-end'>
+          <Select
+            className='max-w-24'
+            label='Items per page'
+            value={itemsPerPage}
+            onChange={handlePerPageChange}
+          >
+            <option value={PER_PAGE}>{PER_PAGE}</option>
+            {[20, 25, 30, 100].map((perPage) => (
+              <option key={perPage} value={perPage}>
+                {perPage}
+              </option>
+            ))}
+          </Select>
+          <div className='w-full flex justify-end gap-2'>
+            <ButtonBase
+              disabled={loading || !cursorHistory.length}
+              onClick={handlePreviousClick}
+            >
+              Previous
+            </ButtonBase>
+            <ButtonBase
+              disabled={loading || !data.pagination.hasNextPage}
+              onClick={handleNextClick}
+            >
+              Next
+            </ButtonBase>
+          </div>
+        </div>
+      )}
+
       {loading && <div className='loading loading-spinner' />}
 
       {!loading && data?.data.length && (
         <div className='w-full'>
-          <UserTable users={data?.data} />
-        </div>
-      )}
-
-      {data?.data.length && (
-        <div className='w-full flex justify-end gap-2'>
-          <ButtonBase
-            disabled={loading || !cursorHistory.length}
-            onClick={handlePreviousClick}
-          >
-            Previous
-          </ButtonBase>
-          <ButtonBase
-            disabled={loading || !data.pagination.hasNextPage}
-            onClick={handleNextClick}
-          >
-            Next
-          </ButtonBase>
+          <UserTable users={data.data} />
         </div>
       )}
     </div>
