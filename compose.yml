@@ -1,5 +1,7 @@
 services:
   database:
+    build:
+      network: host
     container_name: gosource-database
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -7,5 +9,18 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     image: postgres:alpine
     ports:
-      - "127.0.0.1:${DATABASE_PORT}:5432"
-      - "[::1]:${DATABASE_PORT}:5432"
+      - "${DATABASE_PORT}:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+      network: host
+    container_name: gosource-backend
+    depends_on:
+      - database
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:${DATABASE_PORT}/${POSTGRES_DB}
+    ports:
+      - "${BACKEND_PORT}:3000"
