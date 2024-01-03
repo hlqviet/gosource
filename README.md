@@ -3,8 +3,10 @@
 ## Prerequisites
 
 - Node.js >= 18
-- PostgreSQL >= 16 (\*)
+- PostgreSQL >= 16 [^1]
 - Docker Engine >= 24
+
+[^1]: Only required if you don't use Docker.
 
 ## Installation
 
@@ -35,7 +37,6 @@ Now that you have the database and all the apps up. Let's seed some data by runn
 
 ## Notes
 
-- (\*): Not required if you use Docker.
 - The default ports being used are `5432` for PostgreSQL, `3000` for backend and `3001` for frontend. Change them in the `.env` files if you have any service already using those ports. The one in the root directory is used for Docker while those in backend and frontend directories are used for the apps and CLI.
 
 ## Troubleshooting
